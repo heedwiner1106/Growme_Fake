@@ -1,0 +1,82 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+TodoApp
+{% endblock %}
+
+{% block body %}
+{% include 'layout/header.html' %}
+<main class="container">
+    <h1>Todo App</h1>
+    <div class="add_todo row">
+        <form class="col-8" action="/home/addTodo/" method="POST">
+            {% csrf_token%}
+            <input class="col-7 " type="text" name="todo_name">
+            <select class="col-2" name="priority">
+                <option value="1">High</option>
+                <option selected value="2">Medium</option>
+                <option value="3">Low</option>
+            </select>
+            <button class="btn btn-primary col-2" type="submit">Add</button>
+        </form>
+    </div>
+    <table class="table">
+        <h3>{{ today }}</h3>
+        <thead>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Priority</td>
+            <td>Completed</td>
+            <td>Delete</td>
+        </thead>
+        <tbody>
+            {% for todo in todo_list %}
+            <tr>
+                <td>{{todo.todo_name}}</td>
+                <td class="description">
+                    <form class="desciption_form" action="/home/description/{{todo.todo_id}}/" method="post">
+                        {% csrf_token%}
+                        {% if todo.todo_description %}
+                            <input class="des-input" name="description" type="text" value="{{todo.todo_description}}">
+                        {% else %}
+                            <input class="des-input" name="description" type="text" value="--">
+                        {% endif %}
+                        <button type="submit" style="display: none;"></button>
+                    </form>
+                </td>
+                <td>{{todo.todo_priority.name}}</td>
+                {% if todo.todo_completed %}
+                    <td class="completed">
+                        <form action="/home/completed/{{todo.todo_id}}/" method="post">
+                            {% csrf_token%}
+                            <button class="btn-completed" type="submit"><i class="fa-solid fa-check"></i></button>
+                        </form>
+                    </td>
+                {% else %}
+                    <td>
+                        <form action="/home/completed/{{todo.todo_id}}/" method="post">
+                            {% csrf_token%}
+                            <button class="btn-completed" type="submit"><i class="fa-solid fa-check fa-xmark"></i></button>
+                        </form>
+                    </td>
+                {% endif %}
+                <td>
+                    <form action="/home/delete/{{todo.todo_id}}/" method="post">
+                        {% csrf_token%}
+                        <button class="delete" type="submit"><i class="fa-solid fa-ban"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% for day in checkday %}
+      <p>{{day}}</p>
+    {% endfor %}
+    <!-- <p>{{checkday}}</p> -->
+    
+    
+
+</main>
+{% include 'layout/footer.html' %}
+{% endblock %}

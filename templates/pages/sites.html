@@ -1,0 +1,6 @@
+{% for site in list_site %}
+    <tr>
+        <td>{{site.created_user.user_name}}</td>
+        <td>{{site.site_data}}</td>
+    </tr>
+{% endfor %}

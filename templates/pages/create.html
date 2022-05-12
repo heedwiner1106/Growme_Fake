@@ -1,0 +1,14 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+Create
+{% endblock %}
+
+{% block body %}
+{% include 'layout/header.html' %}
+
+<form action="{% url 'Site:site_create' %}" method="post" id="site-create-form">
+    {% csrf_token %}
+    {{ form }}
+    <button type='submit'>Create</button>
+</form>
+{% endblock body %}

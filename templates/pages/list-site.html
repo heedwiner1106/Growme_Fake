@@ -1,0 +1,55 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+TodoApp
+{% endblock %}
+
+{% block body %}
+{% include 'layout/header.html' %}
+<main>
+	List site
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<td>Create</td>
+					<td>Site</td>
+				</tr>
+			</thead>
+			<tbody id="table-site">
+				
+			</tbody>
+		</table>
+	</div>
+
+</main>
+
+
+<script type="text/javascript">
+	$('document').ready(function(){
+		var site = {
+			type: '',
+			cms: 'cms1',
+			owner: 'owner1',
+			manager: 'manager1',
+		}
+		$.ajax({
+			type: "POST",
+			dataType: "html",
+			headers: {'X-CSRFToken': '{{ csrf_token }}'},
+			url: '{% url "Site:list_sites" %}',
+			data: {
+				'action': 'load_site',
+				'params': JSON.stringify(site)
+			},
+			success: function (data){
+				$("#table-site").html(data)
+			},
+			complete: function (data) {
+				console.log('completed')
+				console.log(data)
+
+			}
+		})
+	})
+</script>
+{% endblock %}
